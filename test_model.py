@@ -22,7 +22,7 @@ preds = model.predict(D_train)
 fig, ax = plt.subplots(dpi=500)
 ax.plot(preds, "r")
 ax.plot(Y_train, "b")
-
+plt.xlim(0, 500)
 plt.savefig("./images/fit_to_train.png", bbox_inches='tight', dpi=500)
 plt.show()
 
