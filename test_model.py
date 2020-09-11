@@ -26,6 +26,9 @@ plt.xlim(0, 500)
 plt.savefig("./images/fit_to_train.png", bbox_inches='tight', dpi=500)
 plt.show()
 
+print(preds[0:10])
+print(Y_train[0:10])
+
 fig, ax = plt.subplots()
 xgb.plot_importance(model, ax=ax, max_num_features=25)
 plt.savefig("./images/importance.png", bbox_inches="tight")

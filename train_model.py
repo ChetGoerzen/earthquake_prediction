@@ -1,22 +1,24 @@
 import xgboost as xgb
 import pickle
 
-with open("./data/df.p", "rb") as f:
+data_loc = "/mnt/readynas5/cgoerzen/earthquake_prediction/data/"
+
+with open(data_loc + "df.p", "rb") as f:
     X_train = pickle.load(f)
 
-with open("./data/y.p", "rb") as f:
+with open(data_loc + "y.p", "rb") as f:
     Y_train = pickle.load(f)
 
 D_train = xgb.DMatrix(X_train, label=Y_train)
 
 param = {
     "eta": 0.3,
-    "max_depth": 100,
+    "max_depth": 10,
     "objective": "reg:squarederror"
 }
 
-steps = 2000
+steps = 3000
 
 model = xgb.train(param, D_train, steps)
 
-pickle.dump(model, open("./data/model.p", "wb"))
+pickle.dump(model, open(data_loc + "model.p", "wb"))
