@@ -6,7 +6,7 @@ from multiprocessing import pool
 import pickle
 
 net_info = pd.read_csv("./net_info.csv")
-starttime = UTCDateTime(2016, 11, 5)
+starttime = UTCDateTime(2016, 11, 6)
 
 def make_features(X):
     
@@ -29,6 +29,7 @@ def parallelize(df, func, n_cores):
     return X
 
 data_loc = "/mnt/readynas5/cgoerzen/tc2me/wfs/"
+output_dir = "/mnt/readynas5/cgoerzen/earthquake_prediction/data/"
 
 #for sta in net_info.sta:
 # st = read(data_loc + "2016/11/05/20161105.5B." + str(sta) + "..DHZ.mseed")
@@ -56,11 +57,11 @@ for i in range(int(max(event_times))):
     if marker_time > event:
         event_idx +=1
 
-pickle.dump(time_to_failure, open("./data/y.p", "wb"))
+pickle.dump(time_to_failure, open(output_dir + starttime.strftime("%Y%m%d") + "_y.p", "wb"))
 
 for sta in net_info.sta:
     print(sta)
-    st = read(data_loc + "2016/11/05/20161105.5B." + str(sta) + "..DHZ.mseed")
+    st = read(data_loc + starttime.strftime("%Y/%m/%d/%Y%m%d")+ ".5B." + str(sta) + "..DHZ.mseed")
     split_data = np.array_split(st[0].data, len(st[0].data) / int(sr))
 
     X = pd.DataFrame()
@@ -84,5 +85,5 @@ for sta in net_info.sta:
 
         ct += 1
 
-    pickle.dump(X, open("./data/" + str(sta) + "_X.p", "wb"))
+    pickle.dump(X, open(output_dir + starttime.strftime("%Y%m%d_") + str(sta) + "_X.p", "wb"))
 #pickle.dump(y, open("./data/y.p", "wb"))

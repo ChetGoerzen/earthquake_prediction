@@ -17,7 +17,7 @@ param = {
     "objective": "reg:squarederror"
 }
 
-steps = 3000
+steps = 1000
 
 model = xgb.train(param, D_train, steps)
 
