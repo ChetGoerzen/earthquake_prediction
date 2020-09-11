@@ -6,7 +6,7 @@ import pickle
 
 data_loc = "/mnt/readynas5/cgoerzen/earthquake_prediction/data/"
 
-with open("./model.p", "rb") as f:
+with open(data_loc + "model.p", "rb") as f:
     model = pickle.load(f)
 
 with open(data_loc + "df.p", "rb") as f:
