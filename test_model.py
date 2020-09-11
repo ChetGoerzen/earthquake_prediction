@@ -33,3 +33,6 @@ fig, ax = plt.subplots()
 xgb.plot_importance(model, ax=ax, max_num_features=25)
 plt.savefig("./images/importance.png", bbox_inches="tight")
 plt.show()
+
+pickle.dump(preds, open("./images/preds.p", "wb"))
+pickle.dump(Y_train, open("./images/Y_train.p", "wb"))
