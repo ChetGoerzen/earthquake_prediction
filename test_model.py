@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import xgboost as xgb
 import pickle
+from sklearn.metrics import mean_absolute_error as mae
 
 data_loc = "/mnt/readynas5/cgoerzen/earthquake_prediction/data/"
 
@@ -28,7 +29,7 @@ plt.show()
 
 print(preds[0:10])
 print(Y_train[0:10])
-
+print(mae(preds, Y_train))
 fig, ax = plt.subplots()
 xgb.plot_importance(model, ax=ax, max_num_features=25)
 plt.savefig("./images/importance.png", bbox_inches="tight")

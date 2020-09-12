@@ -12,8 +12,8 @@ with open(data_loc + "y.p", "rb") as f:
 D_train = xgb.DMatrix(X_train, label=Y_train)
 
 param = {
-    "eta": 0.3,
-    "max_depth": 10,
+    "eta": 0.1,
+    "max_depth": 8,
     "objective": "reg:squarederror"
 }
 
