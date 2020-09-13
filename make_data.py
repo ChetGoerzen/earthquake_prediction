@@ -20,14 +20,16 @@ starttime = UTCDateTime(2016, 11, 1)
 sr = 500
 catalog = pd.read_csv("../ToC2ME/Igonin/Catalog_Igonin2020_Beamforming.csv")
 
+test_catalog = catalog[(catalog["Magnitude Mw"]  > 0.8) & (catalog["Month"] == 11) & (catalog.Day <= 20)]
+
 def make_features(X):
-    
+
     strain = []
     strain.append(np.mean(X))
     strain.append(np.std(X))
     strain.append(kurtosis(X))
     strain.append(skew(X))
-    
+
     return pd.Series(strain)
 
 # from https://towardsdatascience.com/make-your-own-super-pandas-using-multiproc-1c04f41944a1
@@ -94,56 +96,52 @@ def run(starttime, catalog, pool):
         if marker_time > event:
             event_idx +=1
 
-    pickle.dump(time_to_failure, open(output_dir + starttime.strftime("%Y%m%d") + "_y.p", "wb"))
+    pickle.dump(time_to_failure, open(output_dir + starttime.strftime("%Y%m%d") + "_y_small.p", "wb"))
 
-    for sta in net_info.sta:
-        print(sta)
-        st = read(data_loc + starttime.strftime("%Y/%m/%d/%Y%m%d")+ ".5B." + str(sta) + "..DHZ.mseed")
-        split_data = np.array_split(st[0].data, len(st[0].data) / int(sr))
-        
-        X = pd.DataFrame()
-        #y = pd.Series()
-
-#        print(len(split_data))
-#        print(len(time_to_failure))
-#        st = time.time()
-        result = pool.map(make_features, split_data)
-#        et = time.time()
-#        dt = et - st
-#        print(f"make_features time: {dt:.2f}")
-        ct = 0
-
- #       st = time.time()
-
-        X = pd.concat(result, axis=1).transpose()[0:len(time_to_failure)]
-
-#        for data in result:
-
-#            if ct < len(time_to_failure):
-            
-#                X = X.append(data, ignore_index=True)
-                #y = y.append(pd.Series(time_to_failure[ct]))
-            
-#            else:
-#               break
+#    for sta in net_info.sta:
+#        print(sta)
+#        st = read(data_loc + starttime.strftime("%Y/%m/%d/%Y%m%d")+ ".5B." + str(sta) + "..DHZ.mseed")
+#        split_data = np.array_split(st[0].data, len(st[0].data) / int(sr))
+#        
+#        X = pd.DataFrame()
 #
-#            ct += 1
-
-#        et = time.time()
-#        dt = et - st
-#        print(f"build X time: {dt:.2f}")
-
-        pickle.dump(X, open(output_dir + starttime.strftime("%Y%m%d_") + str(sta) + "_X.p", "wb"))
+#        result = pool.map(make_features, split_data)
+#        ct = 0
+#
+#
+#        X = pd.concat(result, axis=1).transpose()[0:len(time_to_failure)]
+#
+#        pickle.dump(X, open(output_dir + starttime.strftime("%Y%m%d_") + str(sta) + "_X.p", "wb"))
 
 dt = 3600 * 24 # Number of seconds in a day
 
-pool = Pool(8)
+#pool = Pool(8)
 
-for i in recvbuf:
-    
-    #st = time.time()
-    runner = run(starttime=starttime + i * dt, catalog=catalog, pool=pool)
-    #et = time.time()
-    #dt = et - st
-    #print(f"runtime: {dt:.3f}")
-    del runner
+#for i in recvbuf:
+#    
+#    #st = time.time()
+#    runner = run(starttime=starttime + i * dt, catalog=catalog, pool=pool)
+#    #et = time.time()
+#    #dt = et - st
+#    #print(f"runtime: {dt:.3f}")
+#    del runner
+
+event_times = []
+for index, row in test_catalog.iterrows():
+    tmp_time = 3600 * 24 * row.Day + 3600 * row.Hour + 60 * row.Minute + row.Second
+    event_times.append(tmp_time)
+
+marker_time = 0
+event_idx = 0
+time_to_failure = []
+for i in range(int(max(event_times))):
+    event = event_times[event_idx]
+    ttf = event - marker_time
+    time_to_failure.append(ttf)
+    marker_time += 1
+    if marker_time > event:
+        event_idx +=1
+
+#pickle.dump(time_to_failure, open(output_dir + starttime.strftime("%Y%m%d") + "_y_small.p", "wb"))
+
+pickle.dump(time_to_failure, open(output_dir + "_y_small.p", "wb"))
