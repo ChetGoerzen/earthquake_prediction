@@ -18,7 +18,7 @@ with open(data_loc + "y_large.p", "rb") as f:
 
 y = y[0:len(X)]
 
-stop = int(len(X) * 0.85)
+stop = int(len(X) * 0.77)
 
 X_train = X[0:stop]
 y_train = y[0:stop]
