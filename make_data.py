@@ -144,4 +144,4 @@ for i in range(int(max(event_times))):
 
 #pickle.dump(time_to_failure, open(output_dir + starttime.strftime("%Y%m%d") + "_y_small.p", "wb"))
 
-pickle.dump(time_to_failure, open(output_dir + "_y_small.p", "wb"))
+pickle.dump(time_to_failure, open(output_dir + "y_large.p", "wb"))
