@@ -21,7 +21,7 @@ y = y[0:len(X)]
 #print(len(y))
 print(X)
 print(y)
-stop = int(len(X) * 0.85)
+stop = int(len(X) * 0.77)
 
 X_train = X[0:stop]
 y_train = y[0:stop]
@@ -41,7 +41,7 @@ print(f"Test/Train Ratio: {len(X_test) / len(X_train)}")
 #model = xgb.train(param, D_train, steps)
 model = xgb.XGBRegressor(eta=0.1, max_depth=8, n_estimators=500)
 eval_set = [(X_test, y_test)]
-model.fit(X_train, y_train, early_stopping_rounds=20, eval_metric="rmse",
+model.fit(X_train, y_train, early_stopping_rounds=80, eval_metric="rmse",
           eval_set=eval_set, verbose=True)
 
 pickle.dump(model, open(data_loc + "model.p", "wb"))
