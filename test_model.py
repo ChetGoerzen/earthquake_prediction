@@ -53,3 +53,4 @@ plt.show()
 
 pickle.dump(test_preds, open("./images/preds.p", "wb"))
 pickle.dump(y_test, open("./images/y_test.p", "wb"))
+pickle.dump(y_train, open("./images/y_train.p", "wb"))
