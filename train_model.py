@@ -21,7 +21,7 @@ y = y[0:len(X)]
 #print(len(y))
 print(X)
 print(y)
-stop = int(len(X) * 0.77)
+stop = int(len(X) * 0.55)
 
 X_train = X[0:stop]
 y_train = y[0:stop]
@@ -39,7 +39,7 @@ y_test = y[stop:-1]
 print(f"Test/Train Ratio: {len(X_test) / len(X_train)}")
 
 #model = xgb.train(param, D_train, steps)
-model = xgb.XGBRegressor(eta=0.2, max_depth=8, n_estimators=500)
+model = xgb.XGBRegressor(eta=0.2, max_depth=10, n_estimators=500)
 eval_set = [(X_test, y_test)]
 model.fit(X_train, y_train, verbose=True)
 
